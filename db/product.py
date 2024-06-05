@@ -18,7 +18,7 @@ def createTables():
     conn.close()
 
 
-#CREATE----PRODUC
+#CREATE----PRODUCT
 def createProduct(name, price, category, stock, isActive):
     conn = sqlite3.connect("my_medicalShop.db")
     cursor = conn.cursor()

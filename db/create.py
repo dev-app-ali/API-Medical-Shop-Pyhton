@@ -24,7 +24,7 @@ def createTables():
             pinCode VARCHAR(255)
         );
  ''')
-    
+
 
 
 #PRODUCT-----TABLE
@@ -39,12 +39,29 @@ def createTables():
             isActive BOOLEAN
      );
 ''')
+
+
+
+
+
+
+
+  #Create Order table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Orders(
+            orderId INTEGER PRIMARY KEY AUTOINCREMENT,
+            quantity VARCHAR(255),
+            dateOfOrderCreation DATE,
+            ProductId INT,
+            venderId VARCHAR(255)
+        );
+    ''')
     conn.commit()
     conn.close()
 
-    
 
- #CREATE--------------USER 
+
+ #CREATE--------------USER
 
 def createUser(name,password,phone,email, address, pinCode):
     conn=sqlite3.connect("my_medicalShop.db")
@@ -53,12 +70,42 @@ def createUser(name,password,phone,email, address, pinCode):
     dateOfCreation = date.today()
     conn.execute("""
 INSERT INTO User (user_id, password, level, dateOfAccountCreation, approved, blocked, name, address, email, phone, pinCode)
- VALUES 
+ VALUES
      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 """, (user_id,password,-1, dateOfCreation, 0,0,name, address,email,phone,pinCode))
     conn.commit()
     conn.close()
     return True
+
+
+
+
+
+#CREATE----Order
+
+
+def createOrder(quantity):
+    conn = sqlite3.connect("my_medicalShop.db")
+    cursor = conn.cursor()
+    dateOfOrderCreation = date.today()
+    cursor.execute("""
+        INSERT INTO Orders (quantity, dateOfOrderCreation)
+        VALUES (?, ? );
+    """, (quantity,dateOfOrderCreation))
+
+    conn.commit()
+    conn.close()
+    return True
+
+
+
+
+
+
+
+
+
+
 
 
 

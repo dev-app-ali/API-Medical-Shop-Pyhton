@@ -1,7 +1,6 @@
-from flask import Flask, render_template ,request, jsonify
-from db.create import createTables , createUser
+from flask import Flask,request, jsonify
+from db.create import createTables , createUser,createOrder
 from db.getUsers import getAllUsers, getSpecificUser
-from db.create import createTables , createUser
 from db.userOperation import isApproved,isBlocked
 from db.product import createProduct,updateStockStatus, updateProductPrice
 from db.level import updateUserLevel
@@ -27,7 +26,7 @@ def default():
 
 
 
-        #CREATE--------------USER 
+        #CREATE--------------USER
 
 @app.route('/createUser', methods=['POST'])
 def create_user():
@@ -52,7 +51,7 @@ def create_user():
 
 
 
-                
+
         #GET-------ALL-----USER
 
 @app.route("/getAllUser",methods=['GET'])
@@ -82,7 +81,7 @@ def update_UserLevelHandler():
     level = request.form.get('level')
     if not userId or not level:
         return jsonify({'success': 400, 'message': 'Missing ID or level in request'})
-    
+
     success = updateUserLevel(id=userId, level=level)
     if success:
         return jsonify({'success': 200, 'message': 'User Level Updated Successfully!'})
@@ -110,14 +109,14 @@ def user_Aproved():
         return jsonify({'success': 200, 'message': 'User Approved Successfully!'})
     else:
             return jsonify({'success': 400, 'message': 'Failed! to Approve User'})
-    
+
 
 
 
 
 
         #BLOCK------USER
-    
+
 @app.route('/isBlocked', methods=['PATCH'])
 def user_Blocked():
     userId= request.form.get('ID')
@@ -155,7 +154,7 @@ def create_product():
             return jsonify({'success': 200, 'message': 'Product created successfully!'})
         else:
             return jsonify({'success': 400, 'message': 'Failed to create product'})
-        
+
 
 
 
@@ -166,14 +165,14 @@ def create_product():
 @app.route("/getAllProducts",methods=['GET'])
 def getAllProduct():
     return getAllProducts()
-        
 
 
 
 
 
 
-        
+
+
         #GET-----SPECIFIC----PRODUCT
 
 @app.route("/getProduct",methods=['GET'])
@@ -204,7 +203,7 @@ def update_Product():
 
 
 
-                
+
 
 
     #UPDATE----PRODUCT----PRICE
@@ -223,7 +222,24 @@ def update_ProductPrice():
 
 
 
+#CREATE---------------ORDER
+
+@app.route('/createOrder', methods=['POST'])
+def create_order():
+
+        quantity = request.form.get('quantity')
+
+        if not all([quantity]):
+            return jsonify({'success': 400, 'message': 'Missing required fields. Please provide all fields.'})
+
+        success = createOrder(quantity=quantity)
+        if success:
+            return jsonify({'success': 200, 'message': 'Order created successfully!'})
+        else:
+            return jsonify({'success': 400, 'message': 'Failed to create order'})
+
+
 
 if __name__ == '__main__':
     createTables()
-    app.run()  
+    app.run()
